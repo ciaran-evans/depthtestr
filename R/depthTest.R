@@ -2,29 +2,17 @@
 # sampB = new sample
 # return the depth of each observation in sampB wrt sampA
 
+
 depthFunHalfspace <- function(sampB, sampA){
   fda.usc::mdepth.TD(sampB, sampA)$dep
 }
-
-depthFunHalfspace_self <- function(sampA){
-  sapply(1:nrow(sampA), function(i) fda.usc::mdepth.TD(matrix(sampA[i,], nrow=1), sampA[-i,])$dep)
-}
-
 
 depthFunMahalanobis <- function(sampB, sampA){
   fda.usc::mdepth.MhD(sampB, sampA)$dep
 }
 
-depthFunMahalanobis_self <- function(sampA){
-  sapply(1:nrow(sampA), function(i) fda.usc::mdepth.MhD(matrix(sampA[i,], nrow=1), sampA[-i,])$dep)
-}
-
 depthFunPVB <- function(sampB, sampA){
   DepthProc::depthLocal(sampB, sampA)
-}
-
-depthFunPVB_self <- function(sampA){
-  sapply(1:nrow(sampA), function(i) DepthProc::depthLocal(matrix(sampA[i,], nrow=1), sampA[-i,]))
 }
 
 lpDepthObs <- function(sampB_obs, sampA){
@@ -34,12 +22,6 @@ lpDepthObs <- function(sampB_obs, sampA){
 
 depthFunLp <- function(sampB, sampA){
   apply(sampB, 1, function(x) lpDepthObs(x, sampA))
-}
-
-depthFunLp_self <- function(sampA){
-  dists <- as.matrix(stats::dist(sampA))
-  N1 <- nrow(sampA)
-  sapply(1:N1, function(i) 1/(1 + mean(dists[i,-i])))
 }
 
 pdDepthObs <- function(sampB_obs, sampA, dists){
@@ -56,12 +38,6 @@ depthFunPD <- function(sampB, sampA){
   apply(sampB, 1, function(x) pdDepthObs(x, sampA, dists))
 }
 
-depthFunPD_self <- function(sampA){
-  dists <- as.matrix(stats::dist(sampA))
-  N1 <- nrow(sampA)
-  sapply(1:N1, function(i) {1/((N1-1) * (N1 - 2)) * pdDepthDists(dists[i,-i], dists[-i,-i], N1 - 1)})
-}
-
 lcdDepthObs <- function(sampB_obs, sampA, dists){
   N1 = nrow(sampA)
 
@@ -75,11 +51,6 @@ depthFunLCD <- function(sampB, sampA){
   apply(sampB, 1, function(x) lcdDepthObs(x, sampA, dists))
 }
 
-depthFunLCD_self <- function(sampA){
-  dists <- as.matrix(stats::dist(sampA))
-  N1 <- nrow(sampA)
-  sapply(1:N1, function(i) {1/((N1-1) * (N1 - 2)) * lcdDepthDists(dists[i,-i], dists[-i,-i], N1 - 1)})
-}
 
 #' Test for a difference in distribution
 #'
@@ -96,7 +67,8 @@ depthFunLCD_self <- function(sampA){
 #' samp1 <- rmvnorm(100, mean = rep(0, 10))
 #' samp2 <- rmvnorm(100, mean = rep(1, 10))
 #' depthTest(samp1, samp2, "mahalanobis")
-depthTest <- function(sample1, sample2, method, depthFun = NULL){
+depthTest <- function(sample1, sample2, method,
+                      depthFun = NULL, loo_correction = TRUE){
   sample1 <- as.matrix(sample1)
   sample2 <- as.matrix(sample2)
 
@@ -110,38 +82,28 @@ depthTest <- function(sample1, sample2, method, depthFun = NULL){
       stop("Please specify a custom depth function")
     }
   }
-
-  if(method == "halfspace"){
-    depthFun <- depthFunHalfspace
-    depths_sample2 <- depthFun(sample2, sample1)
-    depths_sample1 <- depthFunHalfspace_self(sample1)
-  } else if(method == "mahalanobis"){
-    depthFun <- depthFunMahalanobis
-    depths_sample2 <- depthFun(sample2, sample1)
-    depths_sample1 <- depthFunMahalanobis_self(sample1)
-  } else if(method == "pvb"){
-    depthFun <- depthFunPVB
-    depths_sample2 <- depthFun(sample2, sample1)
-    depths_sample1 <- depthFunPVB_self(sample1)
-  } else if(method == "lp") {
-    depthFun <- depthFunLp
-    depths_sample2 <- depthFun(sample2, sample1)
-    depths_sample1 <- depthFunLp_self(sample1)
-  } else if(method == "pd"){
-    depthFun <- depthFunPD
-    depths_sample2 <- depthFun(sample2, sample1)
-    depths_sample1 <- depthFunPD_self(sample1)
-  } else if(method == "lcd"){
-    depthFun <- depthFunLCD
-    depths_sample2 <- depthFun(sample2, sample1)
-    depths_sample1 <- depthFunLCD_self(sample1)
-  } else {
-    depths_sample2 <- depthFun(sample2, sample1)
-    depths_sample1 <- depthFun(sample1, sample1)
+  if(method != "custom"){
+    print(paste("Using the", method, "depth function"))
   }
 
-  # depths_sample2 <- depthFun(sample2, sample1)
-  # depths_sample1 <- depthFun(sample1, sample1)
+  depthFun <- switch(method,
+                     "halfspace" = depthFunHalfspace,
+                     "mahalanobis" = depthFunMahalanobis,
+                     "pvb" = depthFunPVB,
+                     "lp" = depthFunLp,
+                     "pd" = depthFunPD,
+                     "lcd" = depthFunLCD,
+                     "custom" = depthFun)
+
+  depths_sample2 <- depthFun(sample2, sample1)
+
+  if(loo_correction){
+    depths_sample1 <- sapply(1:nrow(sample1),
+                             function(i) depthFun(matrix(sample1[i,], nrow=1),
+                                                  sample1[-i,]))
+  } else {
+    depths_sample1 <- depthFun(sample1, sample1)
+  }
 
   r_stats <- sapply(depths_sample2, function(x) mean(depths_sample1 <= x))
   q_stat <- mean(r_stats)
