@@ -4,7 +4,7 @@
 \alias{depthTest}
 \title{Test for a difference in distribution}
 \usage{
-depthTest(sample1, sample2, method, depthFun = NULL)
+depthTest(sample1, sample2, method, depthFun = NULL, loo_correction = TRUE)
 }
 \arguments{
 \item{sample1}{A matrix or data frame containing the first sample}
@@ -14,6 +14,8 @@ depthTest(sample1, sample2, method, depthFun = NULL)
 \item{method}{The depth method to use (one of "halfspace", "mahalanobis", "pvb", "lp", "pd", "lcd", or "custom")}
 
 \item{depthFun}{A depth function which takes two datasets and returns the depths}
+
+\item{loo_correction}{Whether to use a leave-one-out correction when computing the depth of a sample to itself}
 }
 \value{
 The p-value and test statistic for a test of difference in distribution

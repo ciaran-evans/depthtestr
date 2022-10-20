@@ -58,6 +58,7 @@ depthFunLCD <- function(sampB, sampA){
 #' @param sample2 A matrix or data frame containing the second sample
 #' @param method The depth method to use (one of "halfspace", "mahalanobis", "pvb", "lp", "pd", "lcd", or "custom")
 #' @param depthFun A depth function which takes two datasets and returns the depths
+#' @param loo_correction Whether to use a leave-one-out correction when computing the depth of a sample to itself
 #'
 #' @return The p-value and test statistic for a test of difference in distribution
 #' @export
@@ -83,7 +84,7 @@ depthTest <- function(sample1, sample2, method,
     }
   }
   if(method != "custom"){
-    print(paste("Using the", method, "depth function"))
+    message(paste("Using the", method, "depth function"))
   }
 
   depthFun <- switch(method,
