@@ -2,10 +2,14 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 pdDepthDists <- function(new_dists, dists, N1) {
-    .Call('_depthtestr_pdDepthDists', PACKAGE = 'depthtestr', new_dists, dists, N1)
+    .Call(`_depthtestr_pdDepthDists`, new_dists, dists, N1)
 }
 
 lcdDepthDists <- function(new_dists, dists, N1) {
-    .Call('_depthtestr_lcdDepthDists', PACKAGE = 'depthtestr', new_dists, dists, N1)
+    .Call(`_depthtestr_lcdDepthDists`, new_dists, dists, N1)
+}
+
+paldDepthDists <- function(new_dists, dists, N1) {
+    .Call(`_depthtestr_paldDepthDists`, new_dists, dists, N1)
 }
 

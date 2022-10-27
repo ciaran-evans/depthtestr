@@ -51,12 +51,25 @@ depthFunLCD <- function(sampB, sampA){
   apply(sampB, 1, function(x) lcdDepthObs(x, sampA, dists))
 }
 
+paldDepthObs <- function(sampB_obs, sampA, dists){
+  N1 = nrow(sampA)
+
+  new_dists <- sqrt(rowSums((sweep(sampA, 2, sampB_obs, "-"))^2))
+
+  return(1/N1 * paldDepthDists(new_dists, dists, N1))
+}
+
+depthFunPaLD <- function(sampB, sampA){
+  dists <- as.matrix(stats::dist(sampA))
+  apply(sampB, 1, function(x) paldDepthObs(x, sampA, dists))
+}
+
 
 #' Test for a difference in distribution
 #'
 #' @param sample1 A matrix or data frame containing the first sample
 #' @param sample2 A matrix or data frame containing the second sample
-#' @param method The depth method to use (one of "halfspace", "mahalanobis", "pvb", "lp", "pd", "lcd", or "custom")
+#' @param method The depth method to use (one of "halfspace", "mahalanobis", "pvb", "lp", "pd", "lcd", "pald", or "custom")
 #' @param depthFun A depth function which takes two datasets and returns the depths
 #' @param loo_correction Whether to use a leave-one-out correction when computing the depth of a sample to itself
 #'
@@ -74,7 +87,7 @@ depthTest <- function(sample1, sample2, method,
   sample2 <- as.matrix(sample2)
 
   possible_methods <- c("halfspace", "mahalanobis", "pvb",
-                        "lp", "pd", "lcd", "custom")
+                        "lp", "pd", "lcd", "pald", "custom")
   if(!(method %in% possible_methods)){
     stop("Invalid depth method", paste("", method))
   }
@@ -94,6 +107,7 @@ depthTest <- function(sample1, sample2, method,
                      "lp" = depthFunLp,
                      "pd" = depthFunPD,
                      "lcd" = depthFunLCD,
+                     "pald" = depthFunPaLD,
                      "custom" = depthFun)
 
   depths_sample2 <- depthFun(sample2, sample1)

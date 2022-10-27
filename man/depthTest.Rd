@@ -11,7 +11,7 @@ depthTest(sample1, sample2, method, depthFun = NULL, loo_correction = TRUE)
 
 \item{sample2}{A matrix or data frame containing the second sample}
 
-\item{method}{The depth method to use (one of "halfspace", "mahalanobis", "pvb", "lp", "pd", "lcd", or "custom")}
+\item{method}{The depth method to use (one of "halfspace", "mahalanobis", "pvb", "lp", "pd", "lcd", "pald", or "custom")}
 
 \item{depthFun}{A depth function which takes two datasets and returns the depths}
 
