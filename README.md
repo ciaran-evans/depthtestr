@@ -20,6 +20,17 @@ You can install `depthtestr` from GitHub using:
 devtools::install_github("ciaran-evans/depthtestr")
 ```
 
+## Example
+
+Here we generate two samples: $X_1,...,X_{100} \sim \mathcal{N}({\bf 0}, I)$ and $Y_1,...,Y_{100} \sim \mathcal{N}({\bf 1}, I)$, where ${\bf 0} \in \mathbb{r}^{10}$ is the vector of all 0s, and ${\bf 1} \in \mathbb{R}^{10}$ is the vector of all 1s. We then use the Liu-Singh test, with Mahalanobis depth, to test the hypothesis that $X$ and $Y$ come from the same distribution.
+
+```r
+library(mvtnorm)
+samp1 <- rmvnorm(100, mean = rep(0, 10))
+samp2 <- rmvnorm(100, mean = rep(1, 10))
+depthTest(samp1, samp2, "mahalanobis")
+```
+
 ## References
 
 Berenhaut, K. S., Moore, K. E., and Melvin, R. L. (2022). A social perspective on perceived distances reveals deep community structure. *Proceedings of the National Academy of Sciences*, 119(4).
