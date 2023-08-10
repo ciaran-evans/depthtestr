@@ -5,11 +5,11 @@ pdDepthDists <- function(new_dists, dists, N1) {
     .Call(`_depthtestr_pdDepthDists`, new_dists, dists, N1)
 }
 
-lcdDepthDists <- function(new_dists, dists, N1) {
-    .Call(`_depthtestr_lcdDepthDists`, new_dists, dists, N1)
+lcdVariantDepthDists <- function(new_dists, dists, N1) {
+    .Call(`_depthtestr_lcdVariantDepthDists`, new_dists, dists, N1)
 }
 
-paldDepthDists <- function(new_dists, dists, N1) {
-    .Call(`_depthtestr_paldDepthDists`, new_dists, dists, N1)
+lcdDepthDists <- function(new_dists, dists, N1) {
+    .Call(`_depthtestr_lcdDepthDists`, new_dists, dists, N1)
 }
 

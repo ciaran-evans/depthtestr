@@ -23,6 +23,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// lcdVariantDepthDists
+double lcdVariantDepthDists(NumericVector new_dists, NumericMatrix dists, int N1);
+RcppExport SEXP _depthtestr_lcdVariantDepthDists(SEXP new_distsSEXP, SEXP distsSEXP, SEXP N1SEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type new_dists(new_distsSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type dists(distsSEXP);
+    Rcpp::traits::input_parameter< int >::type N1(N1SEXP);
+    rcpp_result_gen = Rcpp::wrap(lcdVariantDepthDists(new_dists, dists, N1));
+    return rcpp_result_gen;
+END_RCPP
+}
 // lcdDepthDists
 double lcdDepthDists(NumericVector new_dists, NumericMatrix dists, int N1);
 RcppExport SEXP _depthtestr_lcdDepthDists(SEXP new_distsSEXP, SEXP distsSEXP, SEXP N1SEXP) {
@@ -36,24 +49,11 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// paldDepthDists
-double paldDepthDists(NumericVector new_dists, NumericMatrix dists, int N1);
-RcppExport SEXP _depthtestr_paldDepthDists(SEXP new_distsSEXP, SEXP distsSEXP, SEXP N1SEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type new_dists(new_distsSEXP);
-    Rcpp::traits::input_parameter< NumericMatrix >::type dists(distsSEXP);
-    Rcpp::traits::input_parameter< int >::type N1(N1SEXP);
-    rcpp_result_gen = Rcpp::wrap(paldDepthDists(new_dists, dists, N1));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_depthtestr_pdDepthDists", (DL_FUNC) &_depthtestr_pdDepthDists, 3},
+    {"_depthtestr_lcdVariantDepthDists", (DL_FUNC) &_depthtestr_lcdVariantDepthDists, 3},
     {"_depthtestr_lcdDepthDists", (DL_FUNC) &_depthtestr_lcdDepthDists, 3},
-    {"_depthtestr_paldDepthDists", (DL_FUNC) &_depthtestr_paldDepthDists, 3},
     {NULL, NULL, 0}
 };
 

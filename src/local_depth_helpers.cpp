@@ -14,7 +14,7 @@ double pdDepthDists(NumericVector new_dists, NumericMatrix dists, int N1){
 }
 
 // [[Rcpp::export]]
-double lcdDepthDists(NumericVector new_dists, NumericMatrix dists, int N1){
+double lcdVariantDepthDists(NumericVector new_dists, NumericMatrix dists, int N1){
   Rcpp::NumericMatrix weights(N1, N1);
   for(int i = 0; i < N1; i++){
     for(int j = 0; j < N1; j++){
@@ -34,7 +34,7 @@ double lcdDepthDists(NumericVector new_dists, NumericMatrix dists, int N1){
 }
 
 // [[Rcpp::export]]
-double paldDepthDists(NumericVector new_dists, NumericMatrix dists, int N1){
+double lcdDepthDists(NumericVector new_dists, NumericMatrix dists, int N1){
   Rcpp::NumericVector weights(N1, 1.0);
   for(int i = 0; i < N1; i++){
     for(int j = 0; j < N1; j++){
