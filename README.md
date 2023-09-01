@@ -7,8 +7,8 @@
 * $L_p$ depth (`"lp"`) (Zuo and Serfling, 2000)
 * Local depth from Paindaveine and Van Bever (`"pvb"`) (Paindaveine and Van Bever, 2013)
 * Pairwise depth from Rendsburg and Garreau (`"pd"`) (Rendsburg and Garreau, 2021)
-* Local community depth (`"lcd"`) (Evans and Berenhaut)
-* Partitioned local depth (`"pald"`) (Berenhaut *et al.*, 2022)
+* Local community depth (`"lcd"`) (Evans and Berenhaut; Berenhaut *et al.*, 2022)
+* Local community depth (`"lcd-variant"`) (Evans and Berenhaut)
 * A user-defined custom depth function (`"custom"`)
 
 ## Installation
